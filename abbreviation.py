@@ -15,14 +15,6 @@ def make_sentence(in_word):
         if letter not in alph: return f'Я не нашел слов на букву: {letter}'
         a = numeration[alph[letter]]
 
-        def filter_word(word):
-            new_word = ''
-            for s in word:
-                if s.isalpha():
-                    new_word += s
-
-            return new_word
-
         out_word = choice(lines[a[0]: a[1]])[0]
         if out_word in ans:
             limit = 0
@@ -30,6 +22,9 @@ def make_sentence(in_word):
                 out_word = choice(lines[a[0]: a[1]])[0]
                 limit += 1
                 if limit == 1000: return 'Слишком много символов'
-        ans.append(filter_word(out_word).strip())
+
+        for i in ('!', '?', '.'): #new filter
+            out_word = out_word.strip(i)
+        ans.append(out_word.strip())
 
     return ' '.join(ans)
