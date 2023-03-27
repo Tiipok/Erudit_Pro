@@ -1,13 +1,13 @@
 from random import choice
 from referens import alph, numeration #{'a': 1, ...}, [[beg, end], ...]
 import csv
-def make_sentence():
+def make_sentence(in_word):
 
     with open("Dict.csv", 'r', encoding="utf8") as file:
         csvreader = csv.reader(file)
         lines = list(csvreader)
 
-    sls, ans = list(input()), []
+    sls, ans = list(in_word), []
     for i in range(len(sls)): #reconstruction
         letter = sls[i]
         letter = letter.lower()
