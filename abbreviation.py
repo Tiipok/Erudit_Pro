@@ -1,13 +1,13 @@
 from random import choice
 from referens import alph, numeration #{'a': 1, ...}, [[beg, end], ...]
 import csv
-def make_sentence(in_word):
+def make_sentence(sls):
 
     with open("Dict.csv", 'r', encoding="utf8") as file:
         csvreader = csv.reader(file)
         lines = list(csvreader)
 
-    sls, ans = list(in_word), []
+    ans = []
     for i in range(len(sls)): #reconstruction
         letter = sls[i]
         letter = letter.lower()
@@ -23,8 +23,8 @@ def make_sentence(in_word):
                 limit += 1
                 if limit == 1000: return 'Слишком много символов'
 
-        for i in ('!', '?', '.'): #new filter
-            out_word = out_word.strip(i)
+        for k in ('!', '?', '.'): #new filter
+            out_word = out_word.strip(k)
         ans.append(out_word.strip())
 
     return ' '.join(ans)
