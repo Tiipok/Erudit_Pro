@@ -6,11 +6,13 @@ from gen_three_words import gen_three_words
 app = Flask(__name__)
 
 in_game = 0  # 0 - no game, 1 4 - troynaya chepuha, 2 5 - zapresh buk, 3 6 - abbrev
+turn = 0  # 0-start   1-game
 
 
 @app.route('/', methods=['POST'])
 def resp():
     global in_game
+    global turn
     end_session = False
     buttons = []
 
@@ -24,7 +26,8 @@ def resp():
                 print('exit game')
 
         if in_game == 4:
-            response_text = str(randint(0, 10))
+            l = gen_three_words(text)
+            response_text = ' '.join(x for x in l)
             print(4)
 
         if in_game == 5:
