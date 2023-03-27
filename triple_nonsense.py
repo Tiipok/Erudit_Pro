@@ -23,5 +23,8 @@ def Gen_Three_Words(letter):
         while third == second: third = choice(lines[a[0] : a[1]])[0]
         
         return ' '.join(x for x in [first, second, third])
+<<<<<<< HEAD
 
 print(Gen_Three_Words('а'))
+=======
+>>>>>>> bdc22b16badc55fdf50a876579f1756bf68960a9

@@ -15,7 +15,11 @@ def make_sentence(sls):
         if letter not in alph: return f'Я не нашел слов на букву: {letter}'
         a = numeration[alph[letter]]
 
+<<<<<<< HEAD
         out_word = choice(lines[a[0] : a[1]])[0]
+=======
+        out_word = choice(lines[a[0]: a[1]])[0]
+>>>>>>> bdc22b16badc55fdf50a876579f1756bf68960a9
         if out_word in ans:
             limit = 0
             while out_word in ans:
