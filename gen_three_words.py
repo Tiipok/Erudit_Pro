@@ -4,7 +4,7 @@ from referens import alph, numeration
 
 def gen_three_words(letter):
     l = numeration
-    with open("Dict.csv", 'r') as file:
+    with open("Dict.csv", 'r', encoding="utf8") as file:
         csvreader = csv.reader(file)
         lines = list(csvreader)
 
