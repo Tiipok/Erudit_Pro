@@ -28,4 +28,3 @@ def gen_three_words(letter):
 
         return [first, second, third]
 
-gen_three_words('п')
