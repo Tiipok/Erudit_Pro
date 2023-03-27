@@ -1,6 +1,7 @@
 from flask import Flask, request
 from dialogs import *
 from random import randint
+from gen_three_words import gen_three_words
 
 app = Flask(__name__)
 
