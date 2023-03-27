@@ -1,45 +1,35 @@
 from random import choice
 from referens import alph, numeration #{'a': 1, ...}, [[beg, end], ...]
+import csv
 def make_sentence():
 
-    def filter_word(word):
-        new_word = ''
-        for s in word:
-            if s.isalpha():
-                new_word += s
+    with open("Dict.csv", 'r', encoding="utf8") as file:
+        csvreader = csv.reader(file)
+        lines = list(csvreader)
 
-        return new_word
-
-    x = open('data_words.txt', encoding='utf-8')
-    data = x.readlines() #words
-    x.close()
-
-    in_word = input() #input
-    sls = list(map(str.lower, list(in_word)))
-
+    sls, ans = list(input()), []
     for i in range(len(sls)): #reconstruction
-        if sls[i] == 'ё':
-            sls[i] = 'е'
-        elif sls[i] not in alph.keys():
-            return f'Я не нашел слов на букву: "{sls[i]}"'
+        letter = sls[i]
+        letter = letter.lower()
+        if letter == 'ё': letter = 'е'
+        if letter not in alph: return f'Я не нашел слов на букву: {letter}'
+        a = numeration[alph[letter]]
 
-    ans = [] #making sentence
-    for s in sls:
-        rng = numeration[alph[s]]
-        out_word = choice(data[rng[0]: rng[1]])
+        def filter_word(word):
+            new_word = ''
+            for s in word:
+                if s.isalpha():
+                    new_word += s
 
+            return new_word
+
+        out_word = choice(lines[a[0]: a[1]])[0]
         if out_word in ans:
             limit = 0
             while out_word in ans:
-                out_word = choice(data[rng[0]: rng[1]])
-
+                out_word = choice(lines[a[0]: a[1]])[0]
                 limit += 1
-                if limit == 1000:
-                    return 'Слишоком много символов' #чтобы цикл не был бесконечным
-
-        out_word = filter_word(out_word)
-        ans.append(out_word.strip())
+                if limit == 1000: return 'Слишком много символов'
+        ans.append(filter_word(out_word).strip())
 
     return ' '.join(ans)
-
-
