@@ -26,4 +26,3 @@ def gen_three_words(letter):
 
         return [first, second, third]
 
-print(gen_three_words('Б'))
