@@ -23,7 +23,8 @@ def make_resp(response_text, end_session, buttons):
         },
         'version': '1.0'
     }
-    print(resp)
+    print(resp['response']['text'])
+    print(' ')
     return resp
 
 
@@ -46,17 +47,19 @@ def response():
     text = request.json.get('request', ()).get('command')
     text = text.lower()
     
+    
     user_id = request.json.get('session', ()).get('user_id')
     new = request.json.get('session', ()).get('new')
-
+    
     if user_id not in status_list:
         status_list[user_id] = 0
-        
+
     if new:
         status_list[user_id] = 0
 
     status = status_list[user_id]
-
+    print(text)
+    print(user_id, status)
     response_text = ''
     buttons = []
 
@@ -65,7 +68,7 @@ def response():
         response_text = 'До свидания! Закрываю навык.'
         end_session = True
         buttons = []
-        status = -1
+        status = 0
         return make_resp(response_text, end_session, buttons)
                 
     # users bored phrases               
@@ -122,6 +125,10 @@ def response():
             response_text = troynaya_rules
             buttons = dec_btns
 
+        elif text in disagree:
+            response_text = 'Во что сыграем?'
+            buttons = all_btns
+
         else:
             response_text = 'Я вас не поняла, повторите пожалуйста.'
             buttons = all_btns
@@ -165,6 +172,7 @@ def response():
 
         else:
             response_text = 'err'
+            status = 0
         
         return make_resp(response_text, end_session, buttons)
     
