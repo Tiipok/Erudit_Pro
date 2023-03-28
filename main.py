@@ -27,7 +27,7 @@ def make_resp(response_text, end_session, buttons):
     }
     print(resp['response']['text'])
     with open('logs.txt', 'a', encoding="utf8") as f:
-        f.write(resp['response']['text'])
+        f.write(f'Filya: {resp["response"]["text"]}')
         f.write('\n')
         f.write('\n')
         f.write('\n')
@@ -71,6 +71,10 @@ def response():
         f.write(f'status: {status_list[user_id]}    user id: {user_id}')
         f.write('\n')
         f.write('\n')
+        f.write(f'user: {text}')
+        f.write('\n')
+        f.write('\n')
+
 
     response_text = ''
     buttons = []
