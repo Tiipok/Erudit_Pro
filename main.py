@@ -9,13 +9,12 @@ import pymorphy2
 morph = pymorphy2.MorphAnalyzer()
 app = Flask(__name__)
 
-status = 0
+status_list = {}
 letter = ''
 counter = 0
 questions = []
 
 def make_resp(response_text, end_session, buttons):
-    global status
     resp = {
         'response': {
             'text': response_text,
@@ -25,17 +24,17 @@ def make_resp(response_text, end_session, buttons):
         'version': '1.0'
     }
     print(resp)
-    print(status)
     return resp
 
 
 @app.route('/', methods=['POST'])
 def response():
     end_session = False
-    global status
+    global status_list
     global letter
     global questions
     global counter
+    
 
     all_btns = [{'title': 'Правила каждой', 'hide': False},
                        {'title': 'Тройная чепуха', 'hide': False},
@@ -46,6 +45,17 @@ def response():
 
     text = request.json.get('request', ()).get('command')
     text = text.lower()
+    
+    user_id = request.json.get('session', ()).get('user_id')
+    new = request.json.get('session', ()).get('new')
+
+    if user_id not in status_list:
+        status_list[user_id] = 0
+        
+    if new:
+        status_list[user_id] = 0
+
+    status = status_list[user_id]
 
     response_text = ''
     buttons = []
