@@ -203,7 +203,8 @@ def response():
             if counter < 10:
                 if letter not in text:
                     q = forb_let_questions[randint(0,len(forb_let_questions)-1)]
-                    while q in text: q = forb_let_questions[randint(0,len(forb_let_questions)-1)]
+                    while q in questions: q = forb_let_questions[randint(0,len(forb_let_questions)-1)]
+                    questions.append(q)
                     response_text = str(q)
                     counter += 1
                 else:
@@ -281,4 +282,4 @@ def response():
     
 
 
-app.run(host='0.0.0.0', port=5000,  ssl_context='adhoc')
+app.run(host='0.0.0.0', port=5000)
