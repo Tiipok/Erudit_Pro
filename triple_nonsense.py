@@ -21,10 +21,17 @@ def Gen_Three_Words(letter):
 
         third = choice(lines[a[0] : a[1]])[0]
         while third == second: third = choice(lines[a[0] : a[1]])[0]
-        
+        for k in ('!', '?', '.'): #new filter
+            first = first.strip(k)
+            second = second.strip(k)
+            third = third.strip(k)
         return ' '.join(x for x in [first, second, third])
-<<<<<<< HEAD
 
-print(Gen_Three_Words('а'))
-=======
->>>>>>> bdc22b16badc55fdf50a876579f1756bf68960a9
+def Check_Three_Words(sent, letter):
+    flag = True
+    if len(sent.split())!=3:flag = False
+    for i in sent.split():
+        if i[0] != letter: flag = False
+    
+    return flag
+
