@@ -5,6 +5,7 @@ from triple_nonsense import *
 from Find_Definition import check
 from abbreviation import *
 import pymorphy2
+import time
 
 morph = pymorphy2.MorphAnalyzer()
 app = Flask(__name__)
@@ -13,6 +14,7 @@ status_list = {}
 letter = ''
 counter = 0
 questions = []
+
 
 def make_resp(response_text, end_session, buttons):
     resp = {
@@ -24,6 +26,11 @@ def make_resp(response_text, end_session, buttons):
         'version': '1.0'
     }
     print(resp['response']['text'])
+    with open('logs.txt', 'a', encoding="utf8") as f:
+        f.write(resp['response']['text'])
+        f.write('\n')
+        f.write('\n')
+        f.write('\n')
     print(' ')
     return resp
 
@@ -35,31 +42,36 @@ def response():
     global letter
     global questions
     global counter
-    
+
 
     all_btns = [{'title': 'Правила каждой', 'hide': False},
-                       {'title': 'Тройная чепуха', 'hide': False},
-                       {'title': 'Запрещённая буква', 'hide': False},
-                       {'title': 'Аббревиатура', 'hide': False}, ]
+                {'title': 'Тройная чепуха', 'hide': False},
+                {'title': 'Запрещённая буква', 'hide': False},
+                {'title': 'Аббревиатура', 'hide': False}, ]
     dec_btns = [{'title': 'Я согласен', 'hide': False},
-                        {'title': 'Не хочу', 'hide': False}, ]
+                {'title': 'Не хочу', 'hide': False}, ]
 
     text = request.json.get('request', ()).get('command')
     text = text.lower()
-    
-    
+
     user_id = request.json.get('session', ()).get('user_id')
     new = request.json.get('session', ()).get('new')
-    
+
     if user_id not in status_list:
         status_list[user_id] = 0
 
     if new:
         status_list[user_id] = 0
 
-    status = status_list[user_id]
     print(text)
-    print(user_id, status)
+    print(f'status: {status_list[user_id]}    user id: {user_id}')
+    with open('logs.txt', 'a', encoding="utf8") as f:
+        f.write(time.ctime())
+        f.write('\n')
+        f.write(f'status: {status_list[user_id]}    user id: {user_id}')
+        f.write('\n')
+        f.write('\n')
+
     response_text = ''
     buttons = []
 
@@ -68,42 +80,42 @@ def response():
         response_text = 'До свидания! Закрываю навык.'
         end_session = True
         buttons = []
-        status = 0
+        status_list[user_id] = 0
         return make_resp(response_text, end_session, buttons)
-                
+
     # users bored phrases               
     if text in bored:
         response_text = 'Ну и чем займеся? Поиграем в другие игры или может помолчим?'
         buttons = all_btns
-        status = 0
+        status_list[user_id] = 0
         return make_resp(response_text, end_session, buttons)
 
     # find def in dict for user    
     if 'что значит' in text:
         s = text.split()
-        response_text = f'По толковому словарю Ожигова: {check(s[s.index("значит")+1])}. \nВо что будем играть дальше?'
+        response_text = f"По толковому словарю Ожигова: {check(s[s.index('значит') + 1])}. \nВо что будем играть дальше?"
         buttons = all_btns
-        status = 0
+        status_list[user_id] = 0
         print('hey')
 
         return make_resp(response_text, end_session, buttons)
-    
+
     if text == 'помощь':
         response_text = 'для выхода из навыка скажи стоп, или название игры для того чтобы зайти в нее'
-        status = 0
+        status_list[user_id] = 0
         buttons = all_btns
         return make_resp(response_text, end_session, buttons)
 
     if 'что ты умеешь' in text:
-        status = 0
+        status_list[user_id] = 0
         response_text = 'У меня есть три игры для тебя: Первая - «Тройная чепуха», вторая - «Запрещённая буква», третья - «Аббревиатура». Чтобы зайти в игру просто назови ее. Также ты всегда можешь спросить у меня отперделение слов которые не знаешь и я попробую найти их в своем словарике'
         buttons = all_btns
-        return  make_resp(response_text, end_session, buttons)
+        return make_resp(response_text, end_session, buttons)
 
     # main branch
-    if status == 0:
+    if status_list[user_id] == 0:
         if not text:
-            response_text = intro 
+            response_text = intro
             buttons = all_btns
 
         elif text == 'правила каждой':
@@ -111,17 +123,17 @@ def response():
             buttons = all_btns
 
         elif text == 'аббревиатура':
-            status = 1
+            status_list[user_id] = 1
             response_text = abr_rules
             buttons = dec_btns
 
         elif text == 'запрещённая буква':
-            status = 2
+            status_list[user_id] = 2
             response_text = zapr_rules
             buttons = dec_btns
 
         elif text == 'тройная чепуха':
-            status = 3
+            status_list[user_id] = 3
             response_text = troynaya_rules
             buttons = dec_btns
 
@@ -132,96 +144,97 @@ def response():
         else:
             response_text = 'Я вас не поняла, повторите пожалуйста.'
             buttons = all_btns
-            
+
         return make_resp(response_text, end_session, buttons)
-        
+
     # pregame answer
-    if status in [1, 2, 3]:
+    if status_list[user_id] in [1, 2, 3]:
 
-        if status == 1 and text in agree:
+        if status_list[user_id] == 1 and text in agree:
             response_text = 'Загадайте слово.'
-            status = 4
+            status_list[user_id] = 4
             buttons = []
 
-        elif status == 1 and text in disagree:
+        elif status_list[user_id] == 1 and text in disagree:
             response_text = 'Может в другую игру?'
-            status = 0
+            status_list[user_id] = 0
             buttons = all_btns
 
 
-        elif status == 2 and text in agree:
+        elif status_list[user_id] == 2 and text in agree:
             response_text = 'Какую букву будем избегать?'
-            status = 5
+            status_list[user_id] = 5
             buttons = []
 
-        elif status == 2 and text in disagree:
+        elif status_list[user_id] == 2 and text in disagree:
             response_text = 'Может в другую игру?'
-            status = 0
+            status_list[user_id] = 0
             buttons = all_btns
 
 
-        elif status == 3 and text in agree:
+        elif status_list[user_id] == 3 and text in agree:
             response_text = 'Загадайте букву.'
-            status = 6
+            status_list[user_id] = 6
             buttons = []
 
-        elif status == 3 and text in disagree:
+        elif status_list[user_id] == 3 and text in disagree:
             response_text = 'Может в другую игру?'
-            status = 0
+            status_list[user_id] = 0
             buttons = all_btns
 
         else:
-            response_text = 'err'
-            status = 0
-        
+            response_text = 'ошибка сервера, вас вернули в начало'
+            buttons = all_btns
+            status_list[user_id] = 0
+
         return make_resp(response_text, end_session, buttons)
-    
+
     # games beg branch       
-    if status in [4, 5, 6]:
+    if status_list[user_id] in [4, 5, 6]:
 
-            letter = text
+        letter = text
 
-            if status == 4:
-                f = True
-                for i in letter:
-                    if i not in alph: f = False
-                if f:
-                    response_text = f'Я начинаю: {make_sentence(letter)}. Твоя очередь'
-                    status = 7
-                else:
-                    response_text= 'В слове есть буква на которую нет слов. Выбери другое слово'
-                
-            elif status == 5:
-                q = forb_let_questions[randint(0,len(forb_let_questions)-1)]
-                questions.append(q)
-                response_text = f'Я начинаю: {q}'
-                status = 8
+        if status_list[user_id] == 4:
+            f = True
+            for i in letter:
+                if i not in alph: f = False
+            if f:
+                response_text = f'Я начинаю: {make_sentence(letter)}. Твоя очередь'
+                status_list[user_id] = 7
+            else:
+                response_text = 'В слове есть буква на которую нет слов. Выбери другое слово'
 
-            elif status == 6:
-                if letter in alph:
-                    response_text = f'Я начинаю: {Gen_Three_Words(letter)}. Твоя очередь'
-                    status = 9
-                else:
-                    response_text = 'Я не знаю слов на эту букву. Давай другую?'
+        elif status_list[user_id] == 5:
+            q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
+            questions.append(q)
+            response_text = f'Я начинаю: {q}'
+            status_list[user_id] = 8
 
-            return make_resp(response_text, end_session, buttons)
-    
+        elif status_list[user_id] == 6:
+            if letter in alph:
+                response_text = f'Я начинаю: {Gen_Three_Words(letter)}. Твоя очередь'
+                status_list[user_id] = 9
+            else:
+                response_text = f'Я не знаю слов на букву: {letter}. Давай другую?'
+
+        return make_resp(response_text, end_session, buttons)
+
     # gameplay branches
-    if status in [7, 8, 9]:
-        if status == 7:
+    if status_list[user_id] in [7, 8, 9]:
+        if status_list[user_id] == 7:
             if check_sentence(text, letter):
                 response_text = f'Интересно. Мой вариант: {make_sentence(letter)}. Твоя очередь'
             else:
                 response_text = 'Не похоже на правильное предложение. Продолжим?'
                 buttons = dec_btns
-                status = 10
+                status_list[user_id] = 10
 
-        elif status == 8:
+        elif status_list[user_id] == 8:
 
             if counter < 10:
                 if letter not in text:
-                    q = forb_let_questions[randint(0,len(forb_let_questions)-1)]
-                    while q in questions: q = forb_let_questions[randint(0,len(forb_let_questions)-1)]
+                    q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
+                    while q in questions: q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
                     questions.append(q)
                     response_text = str(q)
                     counter += 1
@@ -230,74 +243,73 @@ def response():
                     buttons = dec_btns
                     counter = 0
                     questions = []
-                    status = 11
+                    status_list[user_id] = 11
 
             elif counter == 10:
                 response_text = 'Поздравляю вы молодец, говорите явно лучше меня. Хотите сыграть еще?'
                 buttons = dec_btns
                 counter = 0
                 questions = []
-                status = 11
+                status_list[user_id] = 11
 
 
-        elif status == 9:
+        elif status_list[user_id] == 9:
             if Check_Three_Words(text, letter):
-                    response_text = f'Интересно. Мой вариант: {Gen_Three_Words(letter)}. Твоя очередь'
+                response_text = f'Интересно. Мой вариант: {Gen_Three_Words(letter)}. Твоя очередь'
             else:
                 response_text = 'Не похоже на правильное предложение. Продолжим?'
                 buttons = dec_btns
-                status = 12
+                status_list[user_id] = 12
 
         return make_resp(response_text, end_session, buttons)
 
     # lose branches
-    if status in [10, 11, 12]:
-        if status == 10:   
+    if status_list[user_id] in [10, 11, 12]:
+        if status_list[user_id] == 10:
             if text in disagree:
-                status = 0
+                status_list[user_id] = 0
                 response_text = 'Во что сыграем?'
                 buttons = all_btns
 
             elif text in agree:
-                status = 4
+                status_list[user_id] = 4
                 response_text = 'Тогда продолжим. Загадай букву.'
-            
+
             else:
-                status = 0
+                status_list[user_id] = 0
                 response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграить в другие игры'
                 buttons = all_btns
-                
-        elif status == 11:
+
+        elif status_list[user_id] == 11:
             if text in disagree:
-                status = 0
+                status_list[user_id] = 0
                 response_text = 'Во что сыграем?'
                 buttons = all_btns
 
             elif text in agree:
-                status = 5
+                status_list[user_id] = 5
                 response_text = 'Тогда продолжим. Загадай букву.'
-            
+
             else:
-                status = 0
+                status_list[user_id] = 0
                 response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграить в другие игры'
                 buttons = all_btns
 
-        elif status == 12:
+        elif status_list[user_id] == 12:
             if text in disagree:
-                status = 0
+                status_list[user_id] = 0
                 response_text = 'Во что сыграем?'
                 buttons = all_btns
 
             elif text in agree:
-                status = 6
+                status_list[user_id] = 6
                 response_text = 'Тогда продолжим. Загадай букву.'
-            
+
             else:
-                status = 0
+                status_list[user_id] = 0
                 response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграить в другие игры'
-                buttons = all_btns   
+                buttons = all_btns
         return make_resp(response_text, end_session, buttons)
-    
 
 
 app.run(host='0.0.0.0', port=5000)
