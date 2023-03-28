@@ -74,6 +74,18 @@ def response():
         print('hey')
 
         return make_resp(response_text, end_session, buttons)
+    
+    if text == 'помощь':
+        response_text = 'для выхода из навыка скажи стоп, или название игры для того чтобы зайти в нее'
+        status = 0
+        buttons = all_btns
+        return make_resp(response_text, end_session, buttons)
+
+    if 'что ты умеешь' in text:
+        status = 0
+        response_text = 'У меня есть три игры для тебя: Первая - «Тройная чепуха», вторая - «Запрещённая буква», третья - «Аббревиатура». Чтобы зайти в игру просто назови ее. Также ты всегда можешь спросить у меня отперделение слов которые не знаешь и я попробую найти их в своем словарике'
+        buttons = all_btns
+        return  make_resp(response_text, end_session, buttons)
 
     # main branch
     if status == 0:
@@ -269,4 +281,4 @@ def response():
     
 
 
-app.run(host='0.0.0.0', port=5000, debug=True)
+app.run(host='0.0.0.0', port=5000,  ssl_context='adhoc')
