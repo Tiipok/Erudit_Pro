@@ -195,7 +195,7 @@ def response():
             buttons = all_btns
 
         else:
-            response_text = 'ошибка сервера, вас вернули в начало'
+            response_text = 'Я вас не понял, во что будем играть?'
             buttons = all_btns
             status_list[user_id] = 0
 
@@ -332,8 +332,8 @@ def response():
 
         return make_resp(response_text, end_session, buttons)
     
-    response_text = 'ошибка сервера'
-    buttons == all_btns
+    response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграить в другие игры'
+    buttons = all_btns
     status_list[user_id] = 0
     
     return make_resp(response_text, end_session, buttons)
