@@ -37,7 +37,6 @@ def make_resp(response_text, end_session, buttons):
 
 @app.route('/', methods=['POST'])
 def response():
-
     # variables for response and working
     global status_list
     global letter
@@ -59,8 +58,8 @@ def response():
     text = request.json.get('request', ()).get('command')
     text = text.lower()
 
-    for k in ('!', '?', '.'): 
-            text = text.replace(k, ' ')
+    for k in ('!', '?', '.', ':'):
+        text = text.replace(k, ' ')
     text = text.replace('ё', 'е')
     text = text.strip()
 
@@ -83,7 +82,6 @@ def response():
         f.write(f'user: {text}')
         f.write('\n')
         f.write('\n')
-
 
     # checking if user wants to exit
     if text in exit_phrases:
@@ -331,11 +329,11 @@ def response():
                 buttons = all_btns
 
         return make_resp(response_text, end_session, buttons)
-    
+
     response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграить в другие игры'
     buttons = all_btns
     status_list[user_id] = 0
-    
+
     return make_resp(response_text, end_session, buttons)
 
 
