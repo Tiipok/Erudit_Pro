@@ -53,6 +53,9 @@ def response():
 
     text = request.json.get('request', ()).get('command')
     text = text.lower()
+    for k in ('!', '?', '.'): 
+            text = text.replace(k, ' ')
+    text = text.replace('ё', 'е')
 
     user_id = request.json.get('session', ()).get('user_id')
     new = request.json.get('session', ()).get('new')
