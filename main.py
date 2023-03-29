@@ -37,13 +37,17 @@ def make_resp(response_text, end_session, buttons):
 
 @app.route('/', methods=['POST'])
 def response():
-    end_session = False
+
+    # variables for response and working
     global status_list
     global letter
     global questions
     global counter
+    end_session = False
+    response_text = ''
+    buttons = []
 
-
+    # buttons sets
     all_btns = [{'title': 'Правила каждой', 'hide': False},
                 {'title': 'Тройная чепуха', 'hide': False},
                 {'title': 'Запрещённая буква', 'hide': False},
@@ -51,21 +55,23 @@ def response():
     dec_btns = [{'title': 'Я согласен', 'hide': False},
                 {'title': 'Не хочу', 'hide': False}, ]
 
+    # getting and filtering user input
     text = request.json.get('request', ()).get('command')
     text = text.lower()
+
     for k in ('!', '?', '.'): 
             text = text.replace(k, ' ')
     text = text.replace('ё', 'е')
+    text = text.strip()
 
+    # getting user's id
     user_id = request.json.get('session', ()).get('user_id')
     new = request.json.get('session', ()).get('new')
 
-    if user_id not in status_list:
-        status_list[user_id] = 0
+    if user_id not in status_list: status_list[user_id] = 0
+    if new: status_list[user_id] = 0
 
-    if new:
-        status_list[user_id] = 0
-
+    # writting logs
     print(text)
     print(f'status: {status_list[user_id]}    user id: {user_id}')
     with open('logs.txt', 'a', encoding="utf8") as f:
@@ -78,9 +84,6 @@ def response():
         f.write('\n')
         f.write('\n')
 
-
-    response_text = ''
-    buttons = []
 
     # checking if user wants to exit
     if text in exit_phrases:
@@ -107,7 +110,7 @@ def response():
 
         return make_resp(response_text, end_session, buttons)
 
-    if text == 'помощь':
+    if text in help:
         response_text = 'для выхода из навыка скажи стоп, или название игры для того чтобы зайти в нее'
         status_list[user_id] = 0
         buttons = all_btns
@@ -228,7 +231,9 @@ def response():
 
     # gameplay branches
     if status_list[user_id] in [7, 8, 9]:
+
         if status_list[user_id] == 7:
+
             if check_sentence(text, letter):
                 response_text = f'Интересно. Мой вариант: {make_sentence(letter)}. Твоя очередь'
             else:
@@ -239,6 +244,7 @@ def response():
         elif status_list[user_id] == 8:
 
             if counter < 10:
+
                 if letter not in text:
                     q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
                     while q in questions: q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
@@ -261,6 +267,7 @@ def response():
 
 
         elif status_list[user_id] == 9:
+
             if Check_Three_Words(text, letter):
                 response_text = f'Интересно. Мой вариант: {Gen_Three_Words(letter)}. Твоя очередь'
             else:
@@ -272,6 +279,7 @@ def response():
 
     # lose branches
     if status_list[user_id] in [10, 11, 12]:
+
         if status_list[user_id] == 10:
             if text in disagree:
                 status_list[user_id] = 0
@@ -288,6 +296,7 @@ def response():
                 buttons = all_btns
 
         elif status_list[user_id] == 11:
+
             if text in disagree:
                 status_list[user_id] = 0
                 response_text = 'Во что сыграем?'
@@ -303,6 +312,7 @@ def response():
                 buttons = all_btns
 
         elif status_list[user_id] == 12:
+
             if text in disagree:
                 status_list[user_id] = 0
                 response_text = 'Во что сыграем?'
@@ -316,7 +326,14 @@ def response():
                 status_list[user_id] = 0
                 response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграить в другие игры'
                 buttons = all_btns
+
         return make_resp(response_text, end_session, buttons)
+    
+    response_text = 'ошибка сервера'
+    buttons == all_btns
+    status_list[user_id] = 0
+    
+    return make_resp(response_text, end_session, buttons)
 
 
 app.run(host='0.0.0.0', port=5000)
