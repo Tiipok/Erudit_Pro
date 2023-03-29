@@ -134,17 +134,17 @@ def response():
             response_text = rules
             buttons = all_btns
 
-        elif text == 'аббревиатура':
+        elif text in abr_names:
             status_list[user_id] = 1
             response_text = abr_rules
             buttons = dec_btns
 
-        elif text == 'запрещенная буква':
+        elif text in zapr_names:
             status_list[user_id] = 2
             response_text = zapr_rules
             buttons = dec_btns
 
-        elif text == 'тройная чепуха':
+        elif text in troynaya_names:
             status_list[user_id] = 3
             response_text = troynaya_rules
             buttons = dec_btns
