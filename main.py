@@ -205,7 +205,7 @@ def response():
     if status_list[user_id] in [4, 5, 6]:
 
         if status_list[user_id] == 4:
-            letter = text[-1]
+            letter = text
             f = True
             for i in letter:
                 if i not in alph: f = False
@@ -216,7 +216,7 @@ def response():
                 response_text = 'В слове есть буква на которую нет слов. Выбери другое слово'
 
         elif status_list[user_id] == 5:
-            letter = text
+            letter = text[-1]
             q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
             questions.append(q)
             response_text = f'Я начинаю: {q}'
