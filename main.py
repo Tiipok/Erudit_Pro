@@ -204,9 +204,8 @@ def response():
     # games beg branch       
     if status_list[user_id] in [4, 5, 6]:
 
-        letter = text
-
         if status_list[user_id] == 4:
+            letter = text[-1]
             f = True
             for i in letter:
                 if i not in alph: f = False
@@ -217,12 +216,14 @@ def response():
                 response_text = 'В слове есть буква на которую нет слов. Выбери другое слово'
 
         elif status_list[user_id] == 5:
+            letter = text
             q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
             questions.append(q)
             response_text = f'Я начинаю: {q}'
             status_list[user_id] = 8
 
         elif status_list[user_id] == 6:
+            letter = text[-1]
             if letter in alph:
                 response_text = f'Я начинаю: {Gen_Three_Words(letter)}. Твоя очередь'
                 status_list[user_id] = 9
