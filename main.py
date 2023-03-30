@@ -299,7 +299,7 @@ def response():
                 status_list[user_id] = 12
                 sound = wrong_sound
 
-    return make_resp(response_text, end_session, buttons, f'{response_text} {sound} ')
+    return make_resp(response_text, end_session, buttons, f'{sound} {response_text}  ')
 
     # lose branches
     if status_list[user_id] in [10, 11, 12]:
