@@ -47,3 +47,6 @@ forb_let_questions = ['Как у вас дела?', 'Какая погода з�
                       'Какого цвета трава?', 'Где живут президенты?', 'Какого цвета ваши глаза?']
 
 help = ['помоги', 'помощь']
+
+correct_sound = '<speaker audio="dialogs-upload/f66c1b12-5d4e-47b8-9b9e-3ff3e9ae385b/7099d9e7-cb82-48e9-949e-2afb5bdebc4a.opus">'
+wrong_sound = '<speaker audio="dialogs-upload/f66c1b12-5d4e-47b8-9b9e-3ff3e9ae385b/ef1ff255-f47c-4405-8183-948a658b368e.opus">'

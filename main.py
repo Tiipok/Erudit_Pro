@@ -11,15 +11,16 @@ morph = pymorphy2.MorphAnalyzer()
 app = Flask(__name__)
 
 status_list = {}
-letter = ''
+letter_list = {}
 counter = 0
 questions = []
 
 
-def make_resp(response_text, end_session, buttons):
+def make_resp(response_text, end_session, buttons, audio=''):
     resp = {
         'response': {
             'text': response_text,
+            'tts': audio,
             'end_session ': end_session,
             'buttons': buttons
         },
@@ -39,7 +40,7 @@ def make_resp(response_text, end_session, buttons):
 def response():
     # variables for response and working
     global status_list
-    global letter
+    global letter_list
     global questions
     global counter
     end_session = False
@@ -101,13 +102,19 @@ def response():
     # find def in dict for user    
     if 'что значит' in text:
         s = text.split()
-        response_text = f"По толковому словарю Ожигова: {check(s[s.index('значит') + 1])}. \nВо что будем играть дальше?"
+        response_text = f"По толковому словарю Ожигова: {s[s.index('значит') + 1]} - {check(s[s.index('значит') + 1])}. \nВо что будем играть?"
         buttons = all_btns
         status_list[user_id] = 0
-        print('hey')
+
+    elif 'что обозначает' in text:
+        s = text.split()
+        response_text = f"По толковому словарю Ожигова: {s[s.index('обозначает') + 1]} - {check(s[s.index('обозначает') + 1])}. \nВо что будем играть?"
+        buttons = all_btns
+        status_list[user_id] = 0
 
         return make_resp(response_text, end_session, buttons)
 
+    # help branch
     if text in help:
         response_text = 'для выхода из навыка скажи стоп, или название игры для того чтобы зайти в нее'
         status_list[user_id] = 0
@@ -127,6 +134,7 @@ def response():
         if not text:
             response_text = intro
             buttons = all_btns
+
 
         elif text == 'правила каждой':
             response_text = rules
@@ -203,24 +211,26 @@ def response():
     if status_list[user_id] in [4, 5, 6]:
 
         if status_list[user_id] == 4:
-            letter = text
+            letter_list[user_id] = text
+            word = text
             f = True
-            for i in letter:
+            for i in word:
                 if i not in alph: f = False
             if f:
-                response_text = f'Я начинаю: {make_sentence(letter)}. Твоя очередь'
+                response_text = f'Я начинаю: {make_sentence(word)}. Твоя очередь'
                 status_list[user_id] = 7
             else:
                 response_text = 'В слове есть буква на которую нет слов. Выбери другое слово'
 
         elif status_list[user_id] == 5:
-            letter = text[-1]
+            letter_list[user_id] = text[-1]
             q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
             questions.append(q)
             response_text = f'Я начинаю: {q}'
             status_list[user_id] = 8
 
         elif status_list[user_id] == 6:
+            letter_list[user_id] = text[-1]
             letter = text[-1]
             if letter in alph:
                 response_text = f'Я начинаю: {Gen_Three_Words(letter)}. Твоя очередь'
@@ -232,32 +242,40 @@ def response():
 
     # gameplay branches
     if status_list[user_id] in [7, 8, 9]:
+        sound = ''
 
         if status_list[user_id] == 7:
-
-            if check_sentence(text, letter):
-                response_text = f'Интересно. Мой вариант: {make_sentence(letter)}. Твоя очередь'
+            word = letter_list[user_id]
+            if check_sentence(text, word):
+                response_text = f'Интересно. Мой вариант: {make_sentence(word)}. Твоя очередь'
+                sound = correct_sound
             else:
                 response_text = 'Не похоже на правильное предложение. Продолжим?'
                 buttons = dec_btns
                 status_list[user_id] = 10
+                sound = wrong_sound
 
         elif status_list[user_id] == 8:
 
             if counter < 10:
+
+                letter = letter_list[user_id]
 
                 if letter not in text:
                     q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
                     while q in questions: q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
                     questions.append(q)
                     response_text = str(q)
+                    sound = correct_sound
                     counter += 1
+
                 else:
                     response_text = 'Упс... Видимо вы ощиблисью Хотите попробовать еще?'
                     buttons = dec_btns
                     counter = 0
                     questions = []
                     status_list[user_id] = 11
+                    sound = wrong_sound
 
             elif counter == 10:
                 response_text = 'Поздравляю вы молодец, говорите явно лучше меня. Хотите сыграть еще?'
@@ -265,18 +283,23 @@ def response():
                 counter = 0
                 questions = []
                 status_list[user_id] = 11
+                sound = correct_sound
 
 
         elif status_list[user_id] == 9:
 
+            letter = letter_list[user_id]
+
             if Check_Three_Words(text, letter):
                 response_text = f'Интересно. Мой вариант: {Gen_Three_Words(letter)}. Твоя очередь'
+                sound = correct_sound
             else:
                 response_text = 'Не похоже на правильное предложение. Продолжим?'
                 buttons = dec_btns
                 status_list[user_id] = 12
+                sound = wrong_sound
 
-        return make_resp(response_text, end_session, buttons)
+    return make_resp(response_text, end_session, buttons, f'{response_text} {sound} ')
 
     # lose branches
     if status_list[user_id] in [10, 11, 12]:
