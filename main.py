@@ -20,7 +20,7 @@ def make_resp(response_text, end_session, buttons, audio=''):
     resp = {
         'response': {
             'text': response_text,
-            'tts': audio,
+            'tts': f'{audio, response_text}',
             'end_session ': end_session,
             'buttons': buttons
         },
@@ -29,9 +29,8 @@ def make_resp(response_text, end_session, buttons, audio=''):
     print(resp['response']['text'])
     with open('logs.txt', 'a', encoding="utf8") as f:
         f.write(f'Filya: {resp["response"]["text"]}')
-        f.write('\n')
-        f.write('\n')
-        f.write('\n')
+        f.write('\n\n\n')
+
     print(' ')
     return resp
 
@@ -71,7 +70,7 @@ def response():
     if user_id not in status_list: status_list[user_id] = 0
     if new: status_list[user_id] = 0
 
-    # writting logs
+    # writing logs
     print(text)
     print(f'status: {status_list[user_id]}    user id: {user_id}')
     with open('logs.txt', 'a', encoding="utf8") as f:
@@ -84,6 +83,7 @@ def response():
         f.write('\n')
         f.write('\n')
 
+
     # checking if user wants to exit
     if text in exit_phrases:
         response_text = 'До свидания! Закрываю навык.'
@@ -92,29 +92,19 @@ def response():
         status_list[user_id] = 0
         return make_resp(response_text, end_session, buttons)
 
-    # users bored phrases               
-    if text in bored:
-        response_text = 'Ну и чем займеся? Поиграем в другие игры или может помолчим?'
-        buttons = all_btns
-        status_list[user_id] = 0
-        return make_resp(response_text, end_session, buttons)
+    # find def in dict for user
+    if any(word in text for word in find_phrases):
 
-    # find def in dict for user    
-    if 'что значит' in text:
-        s = text.split()
-        response_text = f"По толковому словарю Ожигова: {s[s.index('значит') + 1]} - {check(s[s.index('значит') + 1])}. \nВо что будем играть?"
         buttons = all_btns
         status_list[user_id] = 0
-
-    elif 'что обозначает' in text:
-        s = text.split()
-        response_text = f"По толковому словарю Ожигова: {s[s.index('обозначает') + 1]} - {check(s[s.index('обозначает') + 1])}. \nВо что будем играть?"
-        buttons = all_btns
-        status_list[user_id] = 0
+        for sent in find_phrases:
+            if sent in text:
+                s = text.split()
+                response_text = f"По толковому словарю Ожигова: {s[s.index(sent.split()[-1]) + 1]} - {check(s[s.index(sent.split()[-1]) + 1])}. \nВо что будем играть?"
 
         return make_resp(response_text, end_session, buttons)
 
-    # help branch
+        # help branch
     if text in help:
         response_text = 'для выхода из навыка скажи стоп, или название игры для того чтобы зайти в нее'
         status_list[user_id] = 0
@@ -125,9 +115,10 @@ def response():
         status_list[user_id] = 0
         response_text = 'У меня есть три игры для тебя: Первая - «Тройная чепуха», вторая - «Запрещённая буква», ' \
                         'третья - «Аббревиатура». Чтобы зайти в игру просто назови ее. Также ты всегда можешь ' \
-                        'спросить у меня отперделение слов которые не знаешь и я попробую найти их в своем словарике '
+                        'спросить у меня определение слов которые не знаешь и я попробую найти их в своем словарике '
         buttons = all_btns
         return make_resp(response_text, end_session, buttons)
+
 
     # main branch
     if status_list[user_id] == 0:
@@ -270,7 +261,7 @@ def response():
                     counter += 1
 
                 else:
-                    response_text = 'Упс... Видимо вы ощиблисью Хотите попробовать еще?'
+                    response_text = 'Упс... Видимо вы ошиблись Хотите попробовать еще?'
                     buttons = dec_btns
                     counter = 0
                     questions = []
@@ -299,7 +290,7 @@ def response():
                 status_list[user_id] = 12
                 sound = wrong_sound
 
-    return make_resp(response_text, end_session, buttons, f'{sound} {response_text}  ')
+        return make_resp(response_text, end_session, buttons, sound)
 
     # lose branches
     if status_list[user_id] in [10, 11, 12]:
@@ -360,4 +351,4 @@ def response():
     return make_resp(response_text, end_session, buttons)
 
 
-app.run(host='0.0.0.0', port=5000)
+app.run(host='0.0.0.0', port=5000, ssl_context='adhoc')
