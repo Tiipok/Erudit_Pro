@@ -7,15 +7,13 @@ from abbreviation import *
 import pymorphy2
 import time
 
-morph = pymorphy2.MorphAnalyzer()
-app = Flask(__name__)
 
 status_list = {}
 letter_list = {}
 counter = 0
 questions = []
 
-
+app = Flask(__name__)
 def make_resp(response_text, end_session, buttons, audio=''):
     resp = {
         'response': {
@@ -26,16 +24,17 @@ def make_resp(response_text, end_session, buttons, audio=''):
         },
         'version': '1.0'
     }
+
     print(resp['response']['text'])
     with open('logs.txt', 'a', encoding="utf8") as f:
         f.write(f'Filya: {resp["response"]["text"]}')
         f.write('\n\n\n')
-
     print(' ')
+
     return resp
 
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['POST', 'GET'])
 def response():
     # variables for response and working
     global status_list
@@ -83,7 +82,6 @@ def response():
         f.write('\n')
         f.write('\n')
 
-
     # checking if user wants to exit
     if text in exit_phrases:
         response_text = 'До свидания! Закрываю навык.'
@@ -118,7 +116,6 @@ def response():
                         'спросить у меня определение слов которые не знаешь и я попробую найти их в своем словарике '
         buttons = all_btns
         return make_resp(response_text, end_session, buttons)
-
 
     # main branch
     if status_list[user_id] == 0:
@@ -351,4 +348,8 @@ def response():
     return make_resp(response_text, end_session, buttons)
 
 
-app.run(host='0.0.0.0', port=5000, ssl_context='adhoc')
+if __name__ == '__main__':
+    morph = pymorphy2.MorphAnalyzer()
+
+
+    app.run(host='0.0.0.0', port=5000)
