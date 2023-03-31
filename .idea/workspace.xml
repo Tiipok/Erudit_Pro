@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="02762d79-3ce8-4795-8e4b-d6fcf9807176" name="Changes" comment="Filtered dict" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2NbK5734WqlNoSAwlBHTloPIUrE" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;Python&quot;
+    ]
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="02762d79-3ce8-4795-8e4b-d6fcf9807176" name="Changes" comment="" />
+      <created>1679927156007</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1679927156007</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Game">
+      <created>1679939552316</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1679939552316</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Wordslist">
+      <created>1679941910030</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1679941910030</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Wordslist">
+      <created>1679941951322</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1679941951322</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Reduxed">
+      <created>1679944357045</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1679944357045</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Reduxed">
+      <created>1679946986204</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1679946986204</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Reduxed">
+      <created>1679947581831</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1679947581831</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Reduxed">
+      <created>1679948291811</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1679948291811</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Reduxed">
+      <created>1679949042863</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1679949042863</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Filtered dict">
+      <created>1680286518190</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1680286518190</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Filtered dict">
+      <created>1680286950573</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1680286950573</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Filtered dict">
+      <created>1680286959115</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1680286959115</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Game" />
+    <MESSAGE value="Wordslist" />
+    <MESSAGE value="Reduxed" />
+    <MESSAGE value="Filtered dict" />
+    <option name="LAST_COMMIT_MESSAGE" value="Filtered dict" />
+  </component>
+</project>
