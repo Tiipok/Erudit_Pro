@@ -99,14 +99,17 @@ def response():
         status_list[user_id] = 0
         for sent in FIND_phrases:
             if sent in text:
-                s = text.split()
-                word = s[s.index(sent.split()[-1]) + 1]
-                word = morph.parse(word)[0].normal_form
-                ans = check(word)
-                if ans is False:
-                    response_text = 'Мне не удалось найти определение этого слова в толковом словаре Ожегова.\nВо что будем играть?'
-                else:
-                    response_text = f"По толковому словарю Ожегова: {word} - {ans}.\nВо что будем играть?"
+                try:
+                    s = text.split()
+                    word = s[s.index(sent.split()[-1]) + 1]
+                    word = morph.parse(word)[0].normal_form
+                    ans = check(word)
+                    if ans is False:
+                        response_text = 'Мне не удалось найти определение этого слова в толковом словаре Ожегова.\nВо что будем играть?'
+                    else:
+                        response_text = f"По толковому словарю Ожегова: {word} - {ans}.\nВо что будем играть?"
+                except IndexError:
+                    response_text = 'Я вас не понял, перефразируйте вопрос или можем поиграть'
 
         return make_resp(response_text, end_session, buttons)
 
