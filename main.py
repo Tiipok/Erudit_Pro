@@ -235,6 +235,7 @@ def response():
                 status_list[user_id] = 10
                 sound = wrong_sound
 
+
         elif status_list[user_id] == 8:
 
             if counter < 10:
