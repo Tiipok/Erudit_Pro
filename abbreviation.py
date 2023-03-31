@@ -1,30 +1,44 @@
 from random import choice
-from referens import alph, numeration #{'a': 1, ...}, [[beg, end], ...]
+from referens import alph, numeration  # {'a': 1, ...}, [[beg, end], ...]
 import csv
-def make_sentence(sls):
 
+
+def make_sentence(sls):
     with open("Dict.csv", 'r', encoding="utf8") as file:
         csvreader = csv.reader(file)
         lines = list(csvreader)
 
     ans = []
-    for i in range(len(sls)): #reconstruction
+    for i in range(len(sls)):  # reconstruction
         letter = sls[i]
         letter = letter.lower()
         if letter == 'ё': letter = 'е'
         if letter not in alph: return f'Я не нашел слов на букву: {letter}'
         a = numeration[alph[letter]]
 
-        out_word = choice(lines[a[0]: a[1]])[0]
+        out_word = choice(lines[a[0]:a[1]])[0]
         if out_word in ans:
             limit = 0
             while out_word in ans:
-                out_word = choice(lines[a[0]: a[1]])[0]
+                out_word = choice(lines[a[0]:a[1]])[0]
                 limit += 1
                 if limit == 1000: return 'Слишком много символов'
 
-        for k in ('!', '?', '.'): #new filter
+        for k in ('!', '?', '.'):  # new filter
             out_word = out_word.strip(k)
         ans.append(out_word.strip())
 
     return ' '.join(ans)
+
+
+def check_sentence(sent, word):
+    flag = True
+    sent = sent.split()
+    try:
+        for i in range(len(word)):
+            if sent[i][0] != word[i]:
+                flag = False
+                break
+        return flag
+    except IndexError:
+        return False

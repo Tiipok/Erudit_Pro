@@ -1,5 +1,5 @@
 import csv
-from random import randint
+from random import choice
 from referens import alph, numeration
 
 
@@ -14,17 +14,24 @@ def Gen_Three_Words(letter):
 
         a = numeration[alph[letter]]
 
-        first = randint(a[0], a[1])
+        first = choice(lines[a[0] : a[1]])[0]
 
-        second = randint(a[0], a[1])
-        while second == first: second = randint(a[0], a[1])
+        second = choice(lines[a[0] : a[1]])[0]
+        while second == first: second = choice(lines[a[0] : a[1]])[0]
 
-        third = randint(a[0], a[1])
-        while third == second: third = randint(a[0], a[1])
-
-        first = lines[first][0]
-        second = lines[second][0]
-        third = lines[third][0]
-
+        third = choice(lines[a[0] : a[1]])[0]
+        while third == second: third = choice(lines[a[0] : a[1]])[0]
+        for k in ('!', '?', '.'): #new filter
+            first = first.strip(k)
+            second = second.strip(k)
+            third = third.strip(k)
         return ' '.join(x for x in [first, second, third])
+
+def Check_Three_Words(sent, letter):
+    flag = True
+    if len(sent.split())!=3:flag = False
+    for i in sent.split():
+        if i[0] != letter: flag = False
+    
+    return flag
 
