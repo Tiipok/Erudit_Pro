@@ -10,4 +10,4 @@ def check(word):
             if word in row: return row[1]
 
         else:
-            return 'Мне не удалось найти определение этого слова('
+            return False
