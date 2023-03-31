@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02762d79-3ce8-4795-8e4b-d6fcf9807176" name="Changes" comment="Filtered dict" />
+    <list default="true" id="26c872aa-3fd6-4778-8e33-9ae7f4c6a1b5" name="Changes" comment="new agree and disagree added">
+      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_27_03_2023_22_58__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_27_03_2023_22_58__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dict.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Dict.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -125,7 +131,28 @@
       <option name="project" value="LOCAL" />
       <updated>1680286959115</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="dict fix">
+      <created>1680288243030</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1680288243030</updated>
+    </task>
+    <task id="LOCAL-00013" summary="index err fix in find_def">
+      <created>1680288773399</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1680288773399</updated>
+    </task>
+    <task id="LOCAL-00014" summary="new agree and disagree added">
+      <created>1680290839066</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1680290839066</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -144,6 +171,9 @@
     <MESSAGE value="Wordslist" />
     <MESSAGE value="Reduxed" />
     <MESSAGE value="Filtered dict" />
-    <option name="LAST_COMMIT_MESSAGE" value="Filtered dict" />
+    <MESSAGE value="dict fix" />
+    <MESSAGE value="index err fix in find_def" />
+    <MESSAGE value="new agree and disagree added" />
+    <option name="LAST_COMMIT_MESSAGE" value="new agree and disagree added" />
   </component>
 </project>

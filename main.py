@@ -9,7 +9,7 @@ import time
 
 status_list = {}
 letter_list = {}
-counter = 0
+counter_dict = {}
 questions = {}
 
 app = Flask(__name__)
@@ -44,7 +44,7 @@ def response():
     global status_list
     global letter_list
     global questions
-    global counter
+    global counter_dict
     end_session = False
     response_text = ''
     buttons = []
@@ -70,7 +70,7 @@ def response():
     user_id = request.json.get('session', ()).get('user_id')
     new = request.json.get('session', ()).get('new')
 
-    if user_id not in status_list: status_list[user_id] = 0
+    if user_id not in status_list.keys(): status_list[user_id] = 0
     if new: status_list[user_id] = 0
 
     # writing logs
@@ -248,21 +248,25 @@ def response():
 
         elif status_list[user_id] == 8:
 
+            if user_id not in counter_dict.keys(): counter_dict[user_id] = 0
+            counter = counter_dict[user_id]
+
             if counter < 10:
 
                 letter = letter_list[user_id]
+
                 if letter not in text:
                     q = FORBIDEN_questions[randint(0, len(FORBIDEN_questions) - 1)]
                     while q in questions[user_id]: q = FORBIDEN_questions[randint(0, len(FORBIDEN_questions) - 1)]
                     questions[user_id].append(q)
                     response_text = str(q)
                     sound = correct_sound
-                    counter += 1
+                    counter_dict[user_id] += 1
 
                 else:
                     response_text = 'Упс... Видимо вы ошиблись. Хотите попробовать еще?'
                     buttons = dec_btns
-                    counter = 0
+                    counter_dict[user_id] = 0
                     questions[user_id] = []
                     status_list[user_id] = 11
                     sound = wrong_sound
@@ -271,7 +275,7 @@ def response():
 
                 response_text = 'Поздравляю вы молодец, говорите явно лучше меня. Хотите сыграть еще?'
                 buttons = dec_btns
-                counter = 0
+                counter_dict[user_id] = 0
                 questions[user_id] = []
                 status_list[user_id] = 11
                 sound = correct_sound
@@ -289,6 +293,7 @@ def response():
                 buttons = dec_btns
                 status_list[user_id] = 12
                 sound = wrong_sound
+
 
         return make_resp(response_text, end_session, buttons, sound)
 
@@ -318,6 +323,7 @@ def response():
             response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграть в другие игры'
             buttons = all_btns
 
+        del letter_list[user_id]
         return make_resp(response_text, end_session, buttons)
 
     response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграть в другие игры'
