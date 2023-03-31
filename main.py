@@ -225,7 +225,9 @@ def response():
         sound = ''
 
         if status_list[user_id] == 7:
+
             word = letter_list[user_id]
+
             if check_sentence(text, word):
                 response_text = f'Интересно. Мой вариант: {make_sentence(word)}. Твоя очередь'
                 sound = correct_sound
@@ -241,7 +243,6 @@ def response():
             if counter < 10:
 
                 letter = letter_list[user_id]
-
                 if letter not in text:
                     q = FORBIDEN_questions[randint(0, len(FORBIDEN_questions) - 1)]
                     while q in questions[user_id]: q = FORBIDEN_questions[randint(0, len(FORBIDEN_questions) - 1)]
@@ -251,7 +252,7 @@ def response():
                     counter += 1
 
                 else:
-                    response_text = 'Упс... Видимо вы ошиблись Хотите попробовать еще?'
+                    response_text = 'Упс... Видимо вы ошиблись. Хотите попробовать еще?'
                     buttons = dec_btns
                     counter = 0
                     questions[user_id] = []
@@ -259,6 +260,7 @@ def response():
                     sound = wrong_sound
 
             elif counter == 10:
+
                 response_text = 'Поздравляю вы молодец, говорите явно лучше меня. Хотите сыграть еще?'
                 buttons = dec_btns
                 counter = 0
