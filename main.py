@@ -106,7 +106,7 @@ def response():
                 if ans is False:
                     response_text = 'Мне не удалось найти определение этого слова в толковом словаре Ожегова.\nВо что будем играть?'
                 else:
-                    response_text = f"По толковому словарю Ожегова: {s[s.index(sent.split()[-1]) + 1]} - {ans}.\nВо что будем играть?"
+                    response_text = f"По толковому словарю Ожегова: {word} - {ans}.\nВо что будем играть?"
 
         return make_resp(response_text, end_session, buttons)
 
