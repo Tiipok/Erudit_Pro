@@ -7,13 +7,14 @@ from abbreviation import *
 import pymorphy2
 import time
 
-
 status_list = {}
 letter_list = {}
 counter = 0
-questions = []
+questions = {}
 
 app = Flask(__name__)
+
+
 def make_resp(response_text, end_session, buttons, audio=''):
     resp = {
         'response': {
@@ -24,17 +25,18 @@ def make_resp(response_text, end_session, buttons, audio=''):
         },
         'version': '1.0'
     }
-
+    
+    # writing logs
     print(resp['response']['text'])
     with open('logs.txt', 'a', encoding="utf8") as f:
-        f.write(f'Filya: {resp["response"]["text"]}')
+        f.write(f'Filia: {resp["response"]["text"]}')
         f.write('\n\n\n')
     print(' ')
 
     return resp
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['POST'])
 def response():
     # variables for response and working
     global status_list
@@ -76,14 +78,12 @@ def response():
         f.write(time.ctime())
         f.write('\n')
         f.write(f'status: {status_list[user_id]}    user id: {user_id}')
-        f.write('\n')
-        f.write('\n')
+        f.write('\n\n')
         f.write(f'user: {text}')
-        f.write('\n')
-        f.write('\n')
+        f.write('\n\n')
 
     # checking if user wants to exit
-    if text in exit_phrases:
+    if text in EXIT_phrases:
         response_text = 'До свидания! Закрываю навык.'
         end_session = True
         buttons = []
@@ -91,19 +91,22 @@ def response():
         return make_resp(response_text, end_session, buttons)
 
     # find def in dict for user
-    if any(word in text for word in find_phrases):
+    if any(word in text for word in FIND_phrases):
 
         buttons = all_btns
         status_list[user_id] = 0
-        for sent in find_phrases:
+        for sent in FIND_phrases:
             if sent in text:
                 s = text.split()
-                response_text = f"По толковому словарю Ожигова: {s[s.index(sent.split()[-1]) + 1]} - {check(s[s.index(sent.split()[-1]) + 1])}. \nВо что будем играть?"
+                word = s[s.index(sent.split()[-1]) + 1]
+                word = morph.parse(word)[0].normal_form
+                ans = check(word)
+                response_text = f"По толковому словарю Ожегова: {s[s.index(sent.split()[-1]) + 1]} - {ans}. \nВо что будем играть? "
 
         return make_resp(response_text, end_session, buttons)
 
-        # help branch
-    if text in help:
+    # help branch
+    if text in HELP:
         response_text = 'для выхода из навыка скажи стоп, или название игры для того чтобы зайти в нее'
         status_list[user_id] = 0
         buttons = all_btns
@@ -120,30 +123,29 @@ def response():
     # main branch
     if status_list[user_id] == 0:
         if not text:
-            response_text = intro
+            response_text = INTRO
             buttons = all_btns
 
-
-        elif text == 'правила каждой':
-            response_text = rules
+        elif text in ALL_names:
+            response_text = ALL_rules
             buttons = all_btns
 
-        elif text in abr_names:
+        elif text in ABBREVIATION_names:
             status_list[user_id] = 1
-            response_text = abr_rules
+            response_text = ABBREVIATION_rules
             buttons = dec_btns
 
-        elif text in zapr_names:
+        elif text in FORBIDEN_names:
             status_list[user_id] = 2
-            response_text = zapr_rules
+            response_text = FORBIDEN_rules
             buttons = dec_btns
 
-        elif text in troynaya_names:
+        elif text in TRIPLE_names:
             status_list[user_id] = 3
-            response_text = troynaya_rules
+            response_text = TRIPLE_rules
             buttons = dec_btns
 
-        elif text in disagree:
+        elif text in DISAGREE:
             response_text = 'Во что сыграем?'
             buttons = all_btns
 
@@ -156,37 +158,23 @@ def response():
     # pregame answer
     if status_list[user_id] in [1, 2, 3]:
 
-        if status_list[user_id] == 1 and text in agree:
-            response_text = 'Загадайте слово.'
-            status_list[user_id] = 4
-            buttons = []
+        if text in AGREE:
+            if status_list[user_id] == 1:
+                response_text = 'Загадайте слово.'
+                status_list[user_id] = 4
 
-        elif status_list[user_id] == 1 and text in disagree:
+            elif status_list[user_id] == 2:
+                response_text = 'Какую букву будем избегать?'
+                status_list[user_id] = 5
+
+            elif status_list[user_id] == 3:
+                response_text = 'Загадайте букву.'
+                status_list[user_id] = 6
+
+        elif text in DISAGREE:
+            buttons = all_btns
             response_text = 'Может в другую игру?'
             status_list[user_id] = 0
-            buttons = all_btns
-
-
-        elif status_list[user_id] == 2 and text in agree:
-            response_text = 'Какую букву будем избегать?'
-            status_list[user_id] = 5
-            buttons = []
-
-        elif status_list[user_id] == 2 and text in disagree:
-            response_text = 'Может в другую игру?'
-            status_list[user_id] = 0
-            buttons = all_btns
-
-
-        elif status_list[user_id] == 3 and text in agree:
-            response_text = 'Загадайте букву.'
-            status_list[user_id] = 6
-            buttons = []
-
-        elif status_list[user_id] == 3 and text in disagree:
-            response_text = 'Может в другую игру?'
-            status_list[user_id] = 0
-            buttons = all_btns
 
         else:
             response_text = 'Я вас не понял, во что будем играть?'
@@ -199,9 +187,11 @@ def response():
     if status_list[user_id] in [4, 5, 6]:
 
         if status_list[user_id] == 4:
+
             letter_list[user_id] = text
             word = text
             f = True
+
             for i in word:
                 if i not in alph: f = False
             if f:
@@ -211,13 +201,15 @@ def response():
                 response_text = 'В слове есть буква на которую нет слов. Выбери другое слово'
 
         elif status_list[user_id] == 5:
+
             letter_list[user_id] = text[-1]
-            q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
-            questions.append(q)
+            q = FORBIDEN_questions[randint(0, len(FORBIDEN_questions) - 1)]
+            questions[user_id] = [q]
             response_text = f'Я начинаю: {q}'
             status_list[user_id] = 8
 
         elif status_list[user_id] == 6:
+
             letter_list[user_id] = text[-1]
             letter = text[-1]
             if letter in alph:
@@ -250,9 +242,9 @@ def response():
                 letter = letter_list[user_id]
 
                 if letter not in text:
-                    q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
-                    while q in questions: q = forb_let_questions[randint(0, len(forb_let_questions) - 1)]
-                    questions.append(q)
+                    q = FORBIDEN_questions[randint(0, len(FORBIDEN_questions) - 1)]
+                    while q in questions[user_id]: q = FORBIDEN_questions[randint(0, len(FORBIDEN_questions) - 1)]
+                    questions[user_id].append(q)
                     response_text = str(q)
                     sound = correct_sound
                     counter += 1
@@ -261,7 +253,7 @@ def response():
                     response_text = 'Упс... Видимо вы ошиблись Хотите попробовать еще?'
                     buttons = dec_btns
                     counter = 0
-                    questions = []
+                    questions[user_id] = []
                     status_list[user_id] = 11
                     sound = wrong_sound
 
@@ -269,7 +261,7 @@ def response():
                 response_text = 'Поздравляю вы молодец, говорите явно лучше меня. Хотите сыграть еще?'
                 buttons = dec_btns
                 counter = 0
-                questions = []
+                questions[user_id] = []
                 status_list[user_id] = 11
                 sound = correct_sound
 
@@ -292,56 +284,32 @@ def response():
     # lose branches
     if status_list[user_id] in [10, 11, 12]:
 
-        if status_list[user_id] == 10:
-            if text in disagree:
-                status_list[user_id] = 0
-                response_text = 'Во что сыграем?'
-                buttons = all_btns
+        if text in DISAGREE:
+            status_list[user_id] = 0
+            response_text = 'Во что сыграем?'
+            buttons = all_btns
 
-            elif text in agree:
+        elif text in AGREE:
+            if status_list[user_id] == 10:
                 status_list[user_id] = 4
-                response_text = 'Тогда продолжим. Загадай букву.'
+                response_text = 'Тогда продолжим. Загадай слово.'
 
-            else:
-                status_list[user_id] = 0
-                response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграить в другие игры'
-                buttons = all_btns
-
-        elif status_list[user_id] == 11:
-
-            if text in disagree:
-                status_list[user_id] = 0
-                response_text = 'Во что сыграем?'
-                buttons = all_btns
-
-            elif text in agree:
+            elif status_list[user_id] == 11:
                 status_list[user_id] = 5
                 response_text = 'Тогда продолжим. Загадай букву.'
 
-            else:
-                status_list[user_id] = 0
-                response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграить в другие игры'
-                buttons = all_btns
-
-        elif status_list[user_id] == 12:
-
-            if text in disagree:
-                status_list[user_id] = 0
-                response_text = 'Во что сыграем?'
-                buttons = all_btns
-
-            elif text in agree:
+            elif status_list[user_id] == 12:
                 status_list[user_id] = 6
                 response_text = 'Тогда продолжим. Загадай букву.'
 
-            else:
-                status_list[user_id] = 0
-                response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграить в другие игры'
-                buttons = all_btns
+        else:
+            status_list[user_id] = 0
+            response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграть в другие игры'
+            buttons = all_btns
 
         return make_resp(response_text, end_session, buttons)
 
-    response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграить в другие игры'
+    response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграть в другие игры'
     buttons = all_btns
     status_list[user_id] = 0
 
@@ -350,6 +318,4 @@ def response():
 
 if __name__ == '__main__':
     morph = pymorphy2.MorphAnalyzer()
-
-
     app.run(host='0.0.0.0', port=5000)
