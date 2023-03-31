@@ -150,7 +150,7 @@ def response():
             buttons = all_btns
 
         else:
-            response_text = 'Я вас не поняла, повторите пожалуйста.'
+            response_text = 'Я вас не понял, повторите пожалуйста.'
             buttons = all_btns
 
         return make_resp(response_text, end_session, buttons)
