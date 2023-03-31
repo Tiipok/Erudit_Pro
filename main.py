@@ -16,10 +16,12 @@ app = Flask(__name__)
 
 
 def make_resp(response_text, end_session, buttons, audio=''):
+
+    text_to_say = response_text.replace('\n', ' ')
     resp = {
         'response': {
             'text': response_text,
-            'tts': f'{audio, response_text}',
+            'tts': f'{audio, text_to_say}',
             'end_session ': end_session,
             'buttons': buttons
         },
