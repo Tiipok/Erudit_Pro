@@ -109,5 +109,6 @@ FORBIDEN_questions = ['Где живут президенты?', 'Если бы 
 
 HELP = ['помоги', 'помощь', 'не хочу играть', 'мне надоело', 'хватит', 'достало', 'надоело', 'достаточно', 'скучно', ]
 
+intro_sound = '<speaker audio="dialogs-upload/f66c1b12-5d4e-47b8-9b9e-3ff3e9ae385b/88ef0f08-fc0e-439d-9890-1fa80f398227.opus">'
 correct_sound = '<speaker audio="dialogs-upload/f66c1b12-5d4e-47b8-9b9e-3ff3e9ae385b/7099d9e7-cb82-48e9-949e-2afb5bdebc4a.opus">'
 wrong_sound = '<speaker audio="dialogs-upload/f66c1b12-5d4e-47b8-9b9e-3ff3e9ae385b/ef1ff255-f47c-4405-8183-948a658b368e.opus">'
