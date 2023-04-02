@@ -212,8 +212,8 @@ def response():
             if f:
                 response_text = f'Я начинаю: {make_sentence(word)}. Твоя очередь'
                 status_list[user_id] = 7
-            else:
 
+            else:
                 response_text = 'В слове есть буква на которую нет слов. Выбери другое слово'
 
         elif status_list[user_id] == 5:
@@ -228,9 +228,11 @@ def response():
 
             letter_list[user_id] = text[-1]
             letter = text[-1]
+
             if letter in alph:
                 response_text = f'Я начинаю: {Gen_Three_Words(letter)}. Твоя очередь'
                 status_list[user_id] = 9
+                
             else:
                 response_text = f'Я не знаю слов на букву: {letter}. Давай другую?'
 
@@ -251,6 +253,7 @@ def response():
                 PHRASES_list = ['Мне понравилось! Моя фраза:', 'У тебя отлично получается! Моя фраза:', 'Интересно. Мой вариант:']
                 response_text = f'{choice(PHRASES_list)} {make_sentence(word)}. Твоя очередь'
                 sound = correct_sound
+
             else:
                 PHRASES_list = ['Не переживай.', 'Ничего страшного!']
                 response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другую букву?'
@@ -314,6 +317,7 @@ def response():
 
                 response_text = f'{choice(PHRASES_list)} {Gen_Three_Words(letter)}. Твоя очередь'
                 sound = correct_sound
+
             else:
                 PHRASES_list = ['Не переживай.', 'Ничего страшного!']
                 response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другую букву?'
