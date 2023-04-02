@@ -337,7 +337,7 @@ def response():
 
             else:
                 PHRASES_list = ['Не переживай.', 'Ничего страшного!']
-                response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другую букву?'
+                response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другое слово?'
                 buttons = dec_btns
                 status_list[user_id] = 12
                 del letter_list[user_id]
