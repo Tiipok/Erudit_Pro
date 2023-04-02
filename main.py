@@ -96,22 +96,39 @@ def response():
 
     # find def in dict for user
     if any(word in text for word in FIND_phrases):
+        if status_list[user_id] in [7, 8, 9]:
+            buttons = dec_btns
+            status_list[user_id] = status_list[user_id] + 3
+            for sent in FIND_phrases:
+                if sent in text:
+                    try:
+                        s = text.split()
+                        word = s[s.index(sent.split()[-1]) + 1]
+                        word = morph.parse(word)[0].normal_form
+                        ans = check(word)
+                        if ans is False:
+                            response_text = 'Мне не удалось найти определение этого слова в толковом словаре Ожегова.\nПродолжим?'
+                        else:
+                            response_text = f"По толковому словарю Ожегова: {word} - {ans}.\nПродолжим?"
+                    except IndexError:
+                        response_text = 'Я вас не понял, перефразируйте вопрос или можем продолжть.'
 
-        buttons = all_btns
-        status_list[user_id] = 0
-        for sent in FIND_phrases:
-            if sent in text:
-                try:
-                    s = text.split()
-                    word = s[s.index(sent.split()[-1]) + 1]
-                    word = morph.parse(word)[0].normal_form
-                    ans = check(word)
-                    if ans is False:
-                        response_text = 'Мне не удалось найти определение этого слова в толковом словаре Ожегова.\nВо что будем играть?'
-                    else:
-                        response_text = f"По толковому словарю Ожегова: {word} - {ans}.\nВо что будем играть?"
-                except IndexError:
-                    response_text = 'Я вас не понял, перефразируйте вопрос или можем поиграть'
+        else:
+            buttons = all_btns
+            status_list[user_id] = 0
+            for sent in FIND_phrases:
+                if sent in text:
+                    try:
+                        s = text.split()
+                        word = s[s.index(sent.split()[-1]) + 1]
+                        word = morph.parse(word)[0].normal_form
+                        ans = check(word)
+                        if ans is False:
+                            response_text = 'Мне не удалось найти определение этого слова в толковом словаре Ожегова.\nВо что будем играть?'
+                        else:
+                            response_text = f"По толковому словарю Ожегова: {word} - {ans}.\nВо что будем играть?"
+                    except IndexError:
+                        response_text = 'Я вас не понял, перефразируйте вопрос или можем начать игру'
 
         return make_resp(response_text, end_session, buttons)
 
