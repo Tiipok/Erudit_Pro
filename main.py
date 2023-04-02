@@ -180,7 +180,7 @@ def response():
             buttons = all_btns
 
         else:
-            response_text = 'Я вас не понял, повторите пожалуйста.'
+            response_text = 'Я вас не понял, повторите пожалуйста название игры.'
             buttons = all_btns
 
         return make_resp(response_text, end_session, buttons)
@@ -369,13 +369,13 @@ def response():
 
         else:
             status_list[user_id] = 0
-            response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграть в другие игры'
+            response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграть в другие игры. Для продолжения произнесите название игры в которую вы хотите сыграть.'
             buttons = all_btns
 
         
         return make_resp(response_text, end_session, buttons)
 
-    response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграть в другие игры'
+    response_text = 'я не понял, что вы сказали. И вышел из игры, мы можем начать заново или поиграть в другие игры. Для продолжения произнесите название игры в которую вы хотите сыграть.'
     buttons = all_btns
     status_list[user_id] = 0
 
