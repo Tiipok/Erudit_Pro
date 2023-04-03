@@ -11,6 +11,7 @@ status_list = {}
 letter_list = {}
 counter_dict = {}
 questions = {}
+answers_dict = {} 
 
 app = Flask(__name__)
 
@@ -45,6 +46,7 @@ def response():
     global letter_list
     global questions
     global counter_dict
+    global answers_dict
     end_session = False
     response_text = ''
     buttons = []
@@ -217,6 +219,8 @@ def response():
 
     # games beg branch       
     if status_list[user_id] in [4, 5, 6]:
+        
+        answers_dict[user_id] = []
 
         if status_list[user_id] == 4:
 
@@ -266,18 +270,25 @@ def response():
 
             word = letter_list[user_id]
 
-            if check_sentence(text, word):
-                PHRASES_list = ['Мне понравилось! Моя фраза:', 'У тебя отлично получается! Моя фраза:', 'Интересно. Мой вариант:']
-                response_text = f'{choice(PHRASES_list)} {make_sentence(word)}. Твоя очередь'
-                sound = correct_sound
+            if text not in answers_dict[user_id]:
+                
+                answers_dict[user_id].append(text)
 
+                if check_sentence(text, word):
+                    
+                    PHRASES_list = ['Мне понравилось! Моя фраза:', 'У тебя отлично получается! Моя фраза:', 'Интересно. Мой вариант:']
+                    response_text = f'{choice(PHRASES_list)} {make_sentence(word)}. Твоя очередь'
+                    sound = correct_sound
+
+                else:
+                    PHRASES_list = ['Не переживай.', 'Ничего страшного!']
+                    response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другую букву?'
+                    buttons = dec_btns
+                    status_list[user_id] = 10
+                    del letter_list[user_id]
+                    sound = wrong_sound
             else:
-                PHRASES_list = ['Не переживай.', 'Ничего страшного!']
-                response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другую букву?'
-                buttons = dec_btns
-                status_list[user_id] = 10
-                del letter_list[user_id]
-                sound = wrong_sound
+                response_text = 'Не жульничай! Ты уже использовал эту фразу. Даю тебе еще шанс.'
 
 
         # forbiden letter
@@ -316,7 +327,7 @@ def response():
 
             elif counter == 10:
 
-                response_text = 'Поздравляю вы молодец, говорите явно лучше меня. Хотите сыграть еще?'
+                response_text = choice(['Поздравляю вы молодец, говорите явно лучше меня. Хотите сыграть еще?', 'Молодец, поздравляю с победойХотите сыграть еще?'])
                 buttons = dec_btns
                 del counter_dict[user_id]
                 del questions[user_id]
@@ -329,20 +340,26 @@ def response():
 
             letter = letter_list[user_id]
 
-            if Check_Three_Words(text, letter):
-                PHRASES_list = ['Мне понравилось! Моя фраза:', 'У тебя отлично получается! Моя фраза:', 'Интересно. Мой вариант:']
+            if text not in answers_dict[user_id]:
 
-                response_text = f'{choice(PHRASES_list)} {Gen_Three_Words(letter)}. Твоя очередь'
-                sound = correct_sound
+                answers_dict[user_id].append(text)
+
+                if Check_Three_Words(text, letter):
+                    PHRASES_list = ['Мне понравилось! Моя фраза:', 'У тебя отлично получается! Моя фраза:', 'Интересно. Мой вариант:']
+
+                    response_text = f'{choice(PHRASES_list)} {Gen_Three_Words(letter)}. Твоя очередь'
+                    sound = correct_sound
+
+                else:
+                    PHRASES_list = ['Не переживай.', 'Ничего страшного!']
+                    response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другое слово?'
+                    buttons = dec_btns
+                    status_list[user_id] = 12
+                    del letter_list[user_id]
+                    sound = wrong_sound
 
             else:
-                PHRASES_list = ['Не переживай.', 'Ничего страшного!']
-                response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другое слово?'
-                buttons = dec_btns
-                status_list[user_id] = 12
-                del letter_list[user_id]
-                sound = wrong_sound
-
+                response_text = 'Не жульничай! Ты уже использовал эту фразу. Даю тебе еще шанс.'
 
         return make_resp(response_text, end_session, buttons, sound)
 
@@ -365,7 +382,7 @@ def response():
 
             elif status_list[user_id] == 12:
                 status_list[user_id] = 6
-                response_text = 'Тогда продолжим. Загадай букву.'
+                response_text = 'Тогда продолжим. Загадай слово.'
 
         else:
             status_list[user_id] = 0
