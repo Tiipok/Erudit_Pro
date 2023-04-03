@@ -295,7 +295,7 @@ def response():
                     del letter_list[user_id]
                     sound = wrong_sound
             else:
-                response_text = 'Не жульничай! Ты уже использовал эту фразу. Даю тебе еще шанс.'
+                response_text = 'Не жульничай! Эта фраза уже была. Даю тебе еще шанс.'
 
 
         # forbiden letter
@@ -375,7 +375,7 @@ def response():
                     sound = wrong_sound
 
             else:
-                response_text = 'Не жульничай! Ты уже использовал эту фразу. Даю тебе еще шанс.'
+                response_text = 'Не жульничай! Эта фраза уже была. Даю тебе еще шанс.'
 
         return make_resp(response_text, end_session, buttons, sound)
 
