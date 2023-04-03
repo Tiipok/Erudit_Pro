@@ -227,11 +227,13 @@ def response():
             letter_list[user_id] = text
             word = text
             f = True
+            sent = make_sentence(word)
+            answers_dict[user_id].append(sent)
 
             for i in word:
                 if i not in alph: f = False
             if f:
-                response_text = f'Я начинаю: {make_sentence(word)}. Твоя очередь'
+                response_text = f'Я начинаю: {sent}. Твоя очередь'
                 status_list[user_id] = 7
 
             else:
@@ -249,9 +251,11 @@ def response():
 
             letter_list[user_id] = text[-1]
             letter = text[-1]
+            sent = Gen_Three_Words(letter)
+            answers_dict[user_id].append(sent)
 
             if letter in alph:
-                response_text = f'Я начинаю: {Gen_Three_Words(letter)}. Твоя очередь'
+                response_text = f'Я начинаю: {sent}. Твоя очередь'
                 status_list[user_id] = 9
                 
             else:
@@ -275,14 +279,17 @@ def response():
                 answers_dict[user_id].append(text)
 
                 if check_sentence(text, word):
-                    
+
+                    sent = make_sentence(word)
+                    answers_dict[user_id].append(sent)
+
                     PHRASES_list = ['Мне понравилось! Моя фраза:', 'У тебя отлично получается! Моя фраза:', 'Интересно. Мой вариант:']
-                    response_text = f'{choice(PHRASES_list)} {make_sentence(word)}. Твоя очередь'
+                    response_text = f'{choice(PHRASES_list)} {sent}. Твоя очередь'
                     sound = correct_sound
 
                 else:
                     PHRASES_list = ['Не переживай.', 'Ничего страшного!']
-                    response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другую букву?'
+                    response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другое слово?'
                     buttons = dec_btns
                     status_list[user_id] = 10
                     del letter_list[user_id]
@@ -300,9 +307,9 @@ def response():
             if counter < 10:
 
                 letter = letter_list[user_id]
-                if letter == '1': letter = 'первое'
-                if letter == '2': letter = 'второе'
-                if letter == '3': letter = 'третье'
+                if text == '1': text = 'первое'
+                if text == '2': text = 'второе'
+                if text == '3': text = 'третье'
 
 
                 if letter not in text:
@@ -343,15 +350,20 @@ def response():
         elif status_list[user_id] == 9:
 
             letter = letter_list[user_id]
+            
 
             if text not in answers_dict[user_id]:
 
                 answers_dict[user_id].append(text)
 
                 if Check_Three_Words(text, letter):
+
+                    sent = Gen_Three_Words(letter)
+                    answers_dict[user_id].append(sent)
+
                     PHRASES_list = ['Мне понравилось! Моя фраза:', 'У тебя отлично получается! Моя фраза:', 'Интересно. Мой вариант:']
 
-                    response_text = f'{choice(PHRASES_list)} {Gen_Three_Words(letter)}. Твоя очередь'
+                    response_text = f'{choice(PHRASES_list)} {sent}. Твоя очередь'
                     sound = correct_sound
 
                 else:
@@ -369,6 +381,8 @@ def response():
 
     # lose branches
     if status_list[user_id] in [10, 11, 12]:
+
+        answers_dict[user_id] = []
 
         if text in DISAGREE:
             status_list[user_id] = 0
