@@ -300,6 +300,10 @@ def response():
             if counter < 10:
 
                 letter = letter_list[user_id]
+                if letter == '1': letter = 'первое'
+                if letter == '2': letter = 'второе'
+                if letter == '3': letter = 'третье'
+
 
                 if letter not in text:
                     PHRASES_list = ['Вы прекрасно справляетесь. Следующий вопрос:',
