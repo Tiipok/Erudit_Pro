@@ -19,11 +19,9 @@ app = Flask(__name__)
 def make_resp(response_text, end_session, buttons, audio=''):
     
     text = response_text.replace('+', '')
-    text = text.replace('<[500]>', '')
-    text = text.replace('<[400]>', '')
-    text = text.replace('<[300]>', '')
-    text = text.replace('<[200]>', '')
-    text = text.replace('<[100]>', '')
+    for i in range(100,600,100):
+        text = text.replace(f'<[{i}]>', '')
+    
 
     text_to_say = response_text.replace('\n', '')
 
