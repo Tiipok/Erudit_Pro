@@ -96,6 +96,14 @@ def response():
         return make_resp(response_text, end_session, buttons)
 
 
+    if text in BORED:
+        response_text = 'Мы можем поиграть в одну из игр, которые я знаю. Чтобы узнать больше скажи: Правила всех '
+        end_session = False
+        buttons = all_btns
+        status_list[user_id] = 0
+        return make_resp(response_text, end_session, buttons)
+    
+
     # find def in dict for user
     if any(word in text for word in FIND_phrases):
         if status_list[user_id] in [7, 8, 9]:
