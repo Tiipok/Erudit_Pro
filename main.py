@@ -88,7 +88,7 @@ def response():
 
 
     # checking if user wants to exit
-    if text in EXIT_phrases:
+    if any(word in text for word in EXIT_phrases):
         response_text = 'До свидания! Закрываю навык.'
         end_session = True
         buttons = []
@@ -136,14 +136,14 @@ def response():
 
 
     # help branch
-    if text in HELP:
+    if any(word in text for word in HELP):
         response_text = 'для выхода из навыка скажи стоп, или название игры для того чтобы зайти в нее'
         status_list[user_id] = 0
         buttons = all_btns
         return make_resp(response_text, end_session, buttons)
 
     # abilities
-    if text in abilities:
+    if any(word in text for word in abilities):
         status_list[user_id] = 0
         response_text = 'У меня есть три игры для тебя: Первая - «Тройная чепуха», вторая - «Запрещённая буква», ' \
                         'третья - «Аббревиатура». Чтобы зайти в игру просто назови ее. Также ты всегда можешь ' \
@@ -180,7 +180,7 @@ def response():
                 response_text = TRIPLE_rules
                 buttons = dec_btns
 
-            elif text in DISAGREE:
+            elif any(word in text for word in DISAGREE):
                 response_text = 'Во что сыграем?'
                 buttons = all_btns
 
@@ -194,7 +194,7 @@ def response():
         # pregame answer
         case 1 | 2 | 3:
 
-            if text in AGREE:
+            if any(word in text for word in AGREE):
                 if status_list[user_id] == 1:
                     response_text = 'Загадайте слово.'
                     status_list[user_id] = 4
@@ -207,7 +207,7 @@ def response():
                     response_text = 'Загадайте букву.'
                     status_list[user_id] = 6
 
-            elif text in DISAGREE:
+            elif any(word in text for word in DISAGREE):
                 buttons = all_btns
                 response_text = 'Может в другую игру?'
                 status_list[user_id] = 0
@@ -293,13 +293,13 @@ def response():
 
                         else:
                             PHRASES_list = ['Не переживай.', 'Ничего страшного!']
-                            response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другое слово?'
+                            response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Хочешь выберем другое слово?'
                             buttons = dec_btns
                             status_list[user_id] = 10
                             del letter_list[user_id]
                             sound = wrong_sound
                     else:
-                        response_text = 'Не жульничай! Эта фраза уже была. Даю тебе еще шанс.'
+                        response_text = 'Не жульничай! Эта фраза уже была. Даю тебе ещё шанс.'
 
 
                 # forbiden letter
@@ -372,7 +372,7 @@ def response():
 
                         else:
                             PHRASES_list = ['Не переживай.', 'Ничего страшного!']
-                            response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Давай выберем другое слово?'
+                            response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Хочешь выберем другое слово?'
                             buttons = dec_btns
                             status_list[user_id] = 12
                             del letter_list[user_id]
@@ -388,12 +388,12 @@ def response():
 
             answers_dict[user_id] = []
 
-            if text in DISAGREE:
+            if any(word in text for word in DISAGREE):
                 status_list[user_id] = 0
                 response_text = 'Во что сыграем?'
                 buttons = all_btns
 
-            elif text in AGREE:
+            elif any(word in text for word in AGREE):
                 if status_list[user_id] == 10:
                     status_list[user_id] = 4
                     response_text = 'Тогда продолжим. Загадай слово.'
@@ -404,7 +404,7 @@ def response():
 
                 elif status_list[user_id] == 12:
                     status_list[user_id] = 6
-                    response_text = 'Тогда продолжим. Загадай слово.'
+                    response_text = 'Тогда продолжим. Загадай букву.'
 
             else:
                 status_list[user_id] = 0
