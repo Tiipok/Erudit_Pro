@@ -343,7 +343,7 @@ def response():
 
                     elif counter == 10:
 
-                        response_text = choice(['Поздравляю вы молодец, говорите явно лучше меня. Хотите сыграть еще?', 'Молодец, поздравляю с победойХотите сыграть еще?'])
+                        response_text = choice(['Поздравляю вы молодец, говорите явно лучше меня. Хотите сыграть еще?', 'Молодец, поздравляю с победой. Хотите сыграть еще?'])
                         buttons = dec_btns
                         del counter_dict[user_id]
                         del questions[user_id]
@@ -372,7 +372,7 @@ def response():
 
                         else:
                             PHRASES_list = ['Не переживай.', 'Ничего страшного!']
-                            response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Хочешь выберем другое слово?'
+                            response_text = f'Видимо ты ошибся. {choice(PHRASES_list)} Хочешь выберем другую букву?'
                             buttons = dec_btns
                             status_list[user_id] = 12
                             del letter_list[user_id]
