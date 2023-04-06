@@ -160,22 +160,22 @@ def response():
                 response_text = INTRO
                 buttons = all_btns
                 return make_resp(response_text, end_session, buttons, intro_sound)
-
-            elif text in ALL_names:
+            
+            elif any(word in text for word in ALL_names):
                 response_text = ALL_rules
                 buttons = all_btns
 
-            elif text in ABBREVIATION_names:
+            elif any(word in text for word in ABBREVIATION_names):
                 status_list[user_id] = 1
                 response_text = ABBREVIATION_rules
                 buttons = dec_btns
 
-            elif text in FORBIDEN_names:
+            elif any(word in text for word in FORBIDEN_names):
                 status_list[user_id] = 2
                 response_text = FORBIDEN_rules
                 buttons = dec_btns
 
-            elif text in TRIPLE_names:
+            elif any(word in text for word in TRIPLE_names):
                 status_list[user_id] = 3
                 response_text = TRIPLE_rules
                 buttons = dec_btns
