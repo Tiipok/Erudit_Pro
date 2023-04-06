@@ -16,12 +16,20 @@ answers_dict = {}
 app = Flask(__name__)
 
 
-def make_resp(response_text, end_session, buttons, audio='', text_to_say=''):
-    if not text_to_say:
-        text_to_say = response_text.replace('\n', ' ')
+def make_resp(response_text, end_session, buttons, audio=''):
+    
+    text = response_text.replace('+', '')
+    text = text.replace('<[500]>', '')
+    text = text.replace('<[400]>', '')
+    text = text.replace('<[300]>', '')
+    text = text.replace('<[200]>', '')
+    text = text.replace('<[100]>', '')
+
+    text_to_say = response_text.replace('\n', '')
+
     resp = {
         'response': {
-            'text': response_text,
+            'text': text,
             'tts': f'{audio, text_to_say}',
             'end_session ': end_session,
             'buttons': buttons
@@ -167,12 +175,12 @@ def response():
             if new:
                 response_text = INTRO
                 buttons = all_btns
-                return make_resp(response_text, end_session, buttons, intro_sound, INTRO_to_say)
+                return make_resp(response_text, end_session, buttons, intro_sound)
             
             elif any(word in text for word in ALL_names):
                 response_text = ALL_rules
                 buttons = all_btns
-                return make_resp(response_text, end_session, buttons, text_to_say=ALL_rules_to_say)
+                return make_resp(response_text, end_session, buttons)
 
             elif any(word in text for word in ABBREVIATION_names):
                 status_list[user_id] = 1
