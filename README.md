@@ -1,2 +1,2 @@
-# Эрудит Про alice_skill
+# Эрудит Про
 this should be complitly redone using intents from yandex 
