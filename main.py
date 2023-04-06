@@ -22,7 +22,6 @@ def make_resp(response_text, end_session, buttons, audio=''):
     for i in range(100,600,100):
         text = text.replace(f'<[{i}]>', '')
     
-
     text_to_say = response_text.replace('\n', '')
 
     resp = {
@@ -178,7 +177,7 @@ def response():
             elif any(word in text for word in ALL_names):
                 response_text = ALL_rules
                 buttons = all_btns
-                return make_resp(response_text, end_session, buttons)
+                
 
             elif any(word in text for word in ABBREVIATION_names):
                 status_list[user_id] = 1
